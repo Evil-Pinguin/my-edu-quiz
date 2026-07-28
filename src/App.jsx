@@ -9,11 +9,16 @@ import { ThemeContext  } from './context/ThemeContext';
 
 // Ключ для хранения данных в браузере
 const STORAGE_KEY = 'edu-quiz-questions';
+const TIMER_STORAGE_KEY = 'edu-quiz-timer-duration';
 
 function App() {
   const [page, setPage] = useState('menu');
   const [isTimerEnabled, setIsTimerEnabled] = useState(true);
   const {isDarkMode, toggleTheme } = useContext(ThemeContext);
+  const [timerDuration, setTimerDuration] = useState(() => {
+  const savedDuration = localStorage.getItem(TIMER_STORAGE_KEY);
+  return savedDuration ? Number(savedDuration) : 15;
+  });
 
   // --- МАГИЯ ЗАГРУЗКИ ---
   const [questions, setQuestions] = useState(() => {
@@ -36,6 +41,9 @@ function App() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
   }, [questions]);
+  useEffect(() => {
+    localStorage.setItem(TIMER_STORAGE_KEY, String(timerDuration));
+  }, [timerDuration]);
 
   // Функция очистки всех данных (для тестов или кнопки "сброс")
   const handleClearAll = () => {
@@ -66,6 +74,22 @@ function App() {
               <span>⏱️ Таймер</span>
             </label>
 
+            <label className="timer-settings">
+            <span>⏳ Время на вопрос:</span>
+
+            <select
+              value={timerDuration}
+              onChange={(event) => setTimerDuration(Number(event.target.value))}
+              disabled={!isTimerEnabled}
+            >
+              <option value={10}>10 секунд</option>
+              <option value={15}>15 секунд</option>
+              <option value={30}>30 секунд</option>
+              <option value={60}>1 минута</option>
+              <option value={120}>2 минуты</option>
+            </select>
+          </label>
+
       
             <label className="toggle-label" onClick={toggleTheme}>
               <span>🌙 {isDarkMode ? 'Светлая тема' : 'Темная тема'}</span>
@@ -95,7 +119,12 @@ function App() {
         {page === 'game' && (
           <>
              <button onClick={() => setPage('menu')} style={{marginBottom:'20px'}}>← Назад</button>
-             <Game questions={questions} onFinish={() => setPage('menu')} timerEnabled={isTimerEnabled} />
+             <Game
+                questions={questions}
+                onFinish={() => setPage('menu')}
+                timerEnabled={isTimerEnabled}
+                timePerQuestion={timerDuration}
+              />
           </>
         )}
         
