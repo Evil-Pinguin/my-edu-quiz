@@ -263,3 +263,37 @@
   height: 20px;
   cursor: pointer;
 }
+
+/* Стили для Темной Темы */
+.dark-mode {
+  background-color: #121212; /* Очень темно-серый */
+  color: #e0e0e0;
+  transition: background-color 0.3s ease;
+}
+
+/* Адаптация компонентов под темную тему */
+.dark-mode .app-background {
+  background-color: #121212;
+}
+
+.dark-mode .menu-card,
+.dark-mode .game-container,
+.dark-mode .creator-container {
+  background-color: #1e1e1e;
+  color: #fff;
+  box-shadow: none;
+  border: 1px solid #333;
+}
+
+.dark-mode h1, .dark-mode h2 { color: #fff; }
+.dark-mode .option-btn { background-color: #333; border-color: #444; color: white; }
+
+/* Переключатель свитч */
+.switch {
+  width: 40px;
+  height: 20px;
+  background: #ccc;
+  border-radius: 20px;
+  position: relative;
+}
+.switch.active { background: #646cff; }
