@@ -18,6 +18,8 @@ function App() {
   const [page, setPage] = useState('menu'); // 'menu', 'game', 'creator'
   const [questions, setQuestions] = useState(INITIAL_QUESTIONS);
 
+  const [isTimerEnabled,setIsTimerEnabled] = useState(true);
+
   return (
     <div className="app-background">
       <header>
@@ -29,6 +31,17 @@ function App() {
         {page === 'menu' && (
           <div className="menu-card">
             <h2>Добро пожаловать!</h2>
+           
+            <div className="settings-box">
+              <label className="toggle-label">
+                <input 
+                  type="checkbox" 
+                  checked={isTimerEnabled} 
+                  onChange={(e) => setIsTimerEnabled(e.target.checked)}
+                />
+                <span>⏱️ Включить таймер на вопрос?</span>
+              </label>
+            </div>
             <p>Выбери действие:</p>
             <div className="btn-group">
               <button onClick={() => setPage('game')} className="btn-primary">
@@ -51,8 +64,12 @@ function App() {
             >
               ← Назад в меню
             </button>
-            <Game questions={questions} onFinish={() => setPage('menu')} />
-          </>
+            <Game 
+              questions={questions} 
+              onFinish={() => setPage('menu')} 
+              timerEnabled={isTimerEnabled} // <--- Вот эта строчка!
+            /> 
+            </>
         )}
 
         {page === 'creator' && (
